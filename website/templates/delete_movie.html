@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Delete Movie</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+    }
+
+    main {
+      width: 80%;
+      max-width: 500px;
+      margin: 60px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background-color: #c9302c;
+    }
+
+    a {
+      color: #333;
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: background 0.2s ease;
+    }
+
+    a:hover {
+      background-color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h2>Delete Movie</h2>
+  </header>
+
+  <main>
+    <p>Are you sure you want to delete "<strong>{{ movie.movie_name }}</strong>"?</p>
+    <form method="POST">
+      {% csrf_token %}
+      <button type="submit">Yes, Delete</button>
+      <a href="/get_movies">Cancel</a>
+    </form>
+  </main>
+
+</body>
+</html>

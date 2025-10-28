@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Movies</title>
+</head>
+<body>
+
+<h2>All Movies</h2>
+
+<ul>
+    {% for movie in movies %}
+    <li>
+        <strong>ID:</strong> {{ movie.movie_id }} <br>
+        <strong>Name:</strong> {{ movie.movie_name }} <br>
+        <strong>Year:</strong> {{ movie.release_year }} <br>
+        <strong>Rating:</strong> {{ movie.rating }} <br>
+        <a href="/update_movie/{{ movie.movie_id }}">Edit</a> |
+        <a href="/delete_movie/{{ movie.movie_id }}">Delete</a>
+    </li>
+    <hr>
+    {% endfor %}
+</ul>
+
+<a href="/add_movie">Add New Movie</a> |
+<a href="/">Home</a>
+
+</body>
+</html>
