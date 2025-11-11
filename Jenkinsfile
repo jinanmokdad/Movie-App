@@ -46,7 +46,7 @@ pipeline {
                 minikube -p %MINIKUBE_PROFILE% kubectl apply -f deployment.yaml --validate=false
                 minikube -p %MINIKUBE_PROFILE% kubectl apply -f service.yaml --validate=false
 
-                minikube -p %MINIKUBE_PROFIL% kubectl -- rollout status deployment django-deployment
+                minikube -p %MINIKUBE_PROFILE% kubectl -- rollout restart deployment django-deployment
 
                 echo Waiting for deployment rollout...
                 minikube -p %MINIKUBE_PROFILE% kubectl rollout status deployment django-deployment
