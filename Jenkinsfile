@@ -22,7 +22,9 @@ pipeline {
             steps {
                 bat '''
                 kubectl apply -f deployment.yaml
-                kubectl rollout status deployment/django-deployment
+                kubectl apply -f service.yaml
+                kubectl rollout history deployment django-deployment
+                kubectl rollout status deployment django-deployment
                 '''
             }
         }
