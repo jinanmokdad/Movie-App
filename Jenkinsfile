@@ -21,7 +21,7 @@ pipeline {
             steps {
                 bat '''
                 echo Checking Minikube status...
-                minikube status || minikube start --driver=docker
+                minikube status -p %MINIKUBE_PROFILE% || minikube start -p %MINIKUBE_PROFILE% --driver=docker
                 '''
             }
         }
@@ -30,8 +30,9 @@ pipeline {
             steps {
                 bat '''
                 echo Setting Docker environment to Minikube...
-                call minikube docker-env --shell=cmd > docker_env.bat
+                call minikube -p %MINIKUBE_PROFILE% docker-env --shell=cmd > docker_env.bat
                 call docker_env.bat
+
                 echo Building Docker image inside Minikube...
                 docker build -t mydjangoapp:latest .
                 '''
@@ -42,18 +43,29 @@ pipeline {
             steps {
                 bat '''
                 echo Deploying Django app to Minikube...
-                minikube -p %MINIKUBE_PROFILE% kubectl -- apply -f deployment.yaml --validate=false
-                minikube -p %MINIKUBE_PROFILE% kubectl -- apply -f service.yaml --validate=false
+                minikube -p %MINIKUBE_PROFILE% kubectl apply -f deployment.yaml --validate=false
+                minikube -p %MINIKUBE_PROFILE% kubectl apply -f service.yaml --validate=false
 
-                echo Checking rollout status...
-                minikube -p %MINIKUBE_PROFILE% kubectl -- rollout status deployment django-deployment
+                echo Waiting for deployment rollout...
+                minikube -p %MINIKUBE_PROFILE% kubectl rollout status deployment django-deployment
+                '''
+            }
+        }
 
-                echo Getting service URL...
-                minikube service django-service --url > service_url.txt
+        stage('Get Service URL') {
+            steps {
+                bat '''
+                echo Getting Minikube service URL...
 
-                rem Print the URL to Jenkins console
-                echo The application is available at:
-                type service_url.txt
+                REM Get the NodePort of the service
+                for /f "tokens=1" %%i in ('minikube -p %MINIKUBE_PROFILE% kubectl get service django-service -o jsonpath^="{.spec.ports[0].nodePort}"') do set NODE_PORT=%%i
+
+                REM Get Minikube IP
+                for /f "tokens=1" %%i in ('minikube -p %MINIKUBE_PROFILE% ip') do set MINIKUBE_IP=%%i
+
+                REM Construct full URL
+                set SERVICE_URL=http://%MINIKUBE_IP%:%NODE_PORT%
+                echo ✅ Django app is running at %SERVICE_URL%
                 '''
             }
         }
