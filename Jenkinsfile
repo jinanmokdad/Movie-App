@@ -30,7 +30,7 @@ pipeline {
                 minikube -p %MINIKUBE_PROFILE% kubectl -- apply -f service.yaml --validate=false
                 minikube -p %MINIKUBE_PROFILE% kubectl -- rollout history deployment django-deployment
                 minikube -p %MINIKUBE_PROFILE% kubectl -- rollout status deployment django-deployment
-                minikube service django-service -url
+                minikube service django-service --url
                 '''
             }
         }
