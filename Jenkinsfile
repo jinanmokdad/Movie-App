@@ -49,7 +49,6 @@ pipeline {
                 minikube -p %MINIKUBE_PROFILE% kubectl -- rollout status deployment django-deployment
 
                 echo Getting service URL...
-                minikube -p %MINIKUBE_PROFILE% service django-service --url
                 '''
             }
         }
