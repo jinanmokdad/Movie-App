@@ -49,6 +49,11 @@ pipeline {
                 minikube -p %MINIKUBE_PROFILE% kubectl -- rollout status deployment django-deployment
 
                 echo Getting service URL...
+                minikube service django-service --url > service_url.txt
+
+                rem Print the URL to Jenkins console
+                echo The application is available at:
+                type service_url.txt
                 '''
             }
         }
