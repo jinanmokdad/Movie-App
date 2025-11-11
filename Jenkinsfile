@@ -34,7 +34,7 @@ pipeline {
                 call docker_env.bat
 
                 echo Building Docker image inside Minikube...
-                docker build -t mydjangoapp:latest .
+                docker build -t my-django-app:latest .
                 '''
             }
         }
