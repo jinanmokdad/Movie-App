@@ -58,16 +58,21 @@ pipeline {
                 echo Getting Minikube service URL...
 
                 REM Get the NodePort of the service
-                for /f "tokens=1" %%i in ('minikube -p %MINIKUBE_PROFILE% kubectl get service django-service -o jsonpath^="{.spec.ports[0].nodePort}"') do set NODE_PORT=%%i
+                for /f "tokens=*" %%i in ('minikube -p %MINIKUBE_PROFILE% kubectl -- get service django-service --output=jsonpath^="{.spec.ports[0].nodePort}"') do set NODE_PORT=%%i
 
                 REM Get Minikube IP
-                for /f "tokens=1" %%i in ('minikube -p %MINIKUBE_PROFILE% ip') do set MINIKUBE_IP=%%i
+                for /f "tokens=*" %%i in ('minikube -p %MINIKUBE_PROFILE% ip') do set MINIKUBE_IP=%%i
 
                 REM Construct full URL
                 set SERVICE_URL=http://%MINIKUBE_IP%:%NODE_PORT%
                 echo ✅ Django app is running at %SERVICE_URL%
+
+                for /f "tokens=*" %%i in ('minikube -p %MINIKUBE_PROFILE% service django-service --url --format="{{.URL}}"') do set SERVICE_URL=%%i
+                echo ✅ Django app is running at %SERVICE_URL%
+
                 '''
             }
         }
+
     }
 }
