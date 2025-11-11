@@ -49,7 +49,7 @@ pipeline {
                 minikube -p %MINIKUBE_PROFILE% kubectl rollout restart deployment django-deployment
 
                 echo Waiting for deployment rollout...
-                minikube -p %MINIKUBE_PROFILE% kubectl rollout status deployment django-deployment --timeout=600s
+                minikube -p %MINIKUBE_PROFILE% kubectl rollout status deployment django-deployment
                 '''
             }
         }
