@@ -52,27 +52,23 @@ pipeline {
             }
         }
 
-        stage('Get Service URL') {
+        stage('Deploy to Minikube') {
             steps {
                 bat '''
-                echo Getting Minikube service URL...
+                echo Deploying Django app to Minikube...
+                minikube -p %MINIKUBE_PROFILE% kubectl apply -f deployment.yaml --validate=false
+                minikube -p %MINIKUBE_PROFILE% kubectl apply -f service.yaml --validate=false
 
-                REM Get the NodePort of the service
-                for /f "tokens=*" %%i in ('minikube -p %MINIKUBE_PROFILE% kubectl -- get service django-service --output=jsonpath^="{.spec.ports[0].nodePort}"') do set NODE_PORT=%%i
+                echo Checking rollout status...
+                minikube -p %MINIKUBE_PROFILE% kubectl rollout status deployment django-deployment
 
-                REM Get Minikube IP
-                for /f "tokens=*" %%i in ('minikube -p %MINIKUBE_PROFILE% ip') do set MINIKUBE_IP=%%i
-
-                REM Construct full URL
-                set SERVICE_URL=http://%MINIKUBE_IP%:%NODE_PORT%
-                echo ✅ Django app is running at %SERVICE_URL%
-
+                echo Getting host-accessible service URL...
                 for /f "tokens=*" %%i in ('minikube -p %MINIKUBE_PROFILE% service django-service --url --format="{{.URL}}"') do set SERVICE_URL=%%i
                 echo ✅ Django app is running at %SERVICE_URL%
-
                 '''
             }
         }
+
 
     }
 }
