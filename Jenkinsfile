@@ -67,16 +67,16 @@ pipeline {
 
                 REM Construct full URL
                 set SERVICE_URL=http://%MINIKUBE_IP%:%NODE_PORT%
-                echo ✅ Django app is running at %SERVICE_URL%
+                echo  Django app is running at %SERVICE_URL%
 
                 for /f "tokens=*" %%i in ('minikube -p %MINIKUBE_PROFILE% service django-service --url --format="{{.URL}}"') do set SERVICE_URL=%%i
-                echo ✅ Django app is running at %SERVICE_URL%
+                echo  Django app is running at %SERVICE_URL%
 
                 REM Get the host-accessible URL for the service
                 for /f "tokens=*" %%i in ('minikube -p %MINIKUBE_PROFILE% service django-service --url --format="{{.URL}}"') do set SERVICE_URL=%%i
-                echo ✅ Django app is running at %SERVICE_URL%
+                echo  Django app is running at %SERVICE_URL%
 
-                minikube -p minikube kubectl -- port-forward service/django-service 32582:80
+                
 
                 '''
             }
