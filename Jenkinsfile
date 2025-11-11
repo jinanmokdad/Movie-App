@@ -3,6 +3,11 @@ pipeline {
     triggers {
         pollSCM('H/2 * * * *')
     }
+    
+    environment {
+        KUBECONFIG = 'C:\\ProgramData\\Jenkins\\.kube\\config'
+    }
+
     stages {
         stage('Checkout') {
             steps {
